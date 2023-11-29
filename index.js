@@ -327,7 +327,7 @@ ${inject.body || ''}
       }
 
       ffmpegArgs.push(
-        '-frames:v', `${numOutputFrames}`,
+        // '-frames:v', `${numOutputFrames}`,
         '-an', output
       )
 
