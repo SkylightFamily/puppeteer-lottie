@@ -13,6 +13,8 @@ const { sprintf } = require('sprintf-js')
 
 const { cssifyObject } = require('css-in-js-utils')
 
+const FINAL_FRAME_SECONDS = 40
+
 const lottieScript = fs.readFileSync(require.resolve('lottie-web/build/player/lottie.min'), 'utf8')
 
 const injectLottie = `
@@ -312,7 +314,7 @@ ${inject.body || ''}
         ffmpegArgs.push(
           '-f', 'lavfi', '-i', `color=c=black:size=${width}x${height}`,
           '-f', 'image2pipe', '-c:v', 'png', '-r', `${fps}`, '-i', '-',
-          '-filter_complex', `[0:v][1:v]overlay[o];[o]tpad=stop_mode=clone:stop_duration=3[p];[p]${scale}:flags=bicubic[out]`,
+          '-filter_complex', `[0:v][1:v]overlay[o];[o]tpad=stop_mode=clone:stop_duration=${FINAL_FRAME_SECONDS}[p];[p]${scale}:flags=bicubic[out]`,
           '-map', '[out]',
           '-c:v', 'libx264',
           '-profile:v', ffmpegOptions.profileVideo,
