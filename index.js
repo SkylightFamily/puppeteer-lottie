@@ -312,7 +312,7 @@ ${inject.body || ''}
         ffmpegArgs.push(
           '-f', 'lavfi', '-i', `color=c=black:size=${width}x${height}`,
           '-f', 'image2pipe', '-c:v', 'png', '-r', `${fps}`, '-i', '-',
-          '-filter_complex', `[0:v][1:v]overlay[o];[o]${scale}:flags=bicubic[out]`,
+          '-filter_complex', `[0:v][1:v]overlay[o];[o]tpad=stop_mode=clone:stop_duration=3[p];[p]${scale}:flags=bicubic[out]`,
           '-map', '[out]',
           '-c:v', 'libx264',
           '-profile:v', ffmpegOptions.profileVideo,
