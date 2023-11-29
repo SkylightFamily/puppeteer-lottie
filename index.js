@@ -320,7 +320,6 @@ ${inject.body || ''}
           '-crf', ffmpegOptions.crf,
           '-movflags', 'faststart',
           '-pix_fmt', 'yuv420p',
-          '-vf', 'tpad=stop_mode=clone:stop_duration=40',
           '-r', fps
         )
       }
