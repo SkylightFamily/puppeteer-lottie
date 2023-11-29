@@ -13,8 +13,6 @@ const { sprintf } = require('sprintf-js')
 
 const { cssifyObject } = require('css-in-js-utils')
 
-const FINAL_FRAME_SECONDS = 40
-
 const lottieScript = fs.readFileSync(require.resolve('lottie-web/build/player/lottie.min'), 'utf8')
 
 const injectLottie = `
@@ -313,12 +311,8 @@ ${inject.body || ''}
 
         ffmpegArgs.push(
           '-f', 'lavfi', '-i', `color=c=black:size=${width}x${height}`,
-          '-f', 'image2pipe', '-c:v', 'png',
-          //// Passing a -r flag breaks tpad for some reason:
-          //// https://trac.ffmpeg.org/ticket/8409
-          // '-r', `${fps}`,
-          '-i', '-',
-          '-filter_complex', `[0:v][1:v]overlay[o];[o]tpad=stop_mode=clone:stop_duration=${FINAL_FRAME_SECONDS}[p];[p]${scale}:flags=bicubic[out]`,
+          '-f', 'image2pipe', '-c:v', 'png', '-r', `${fps}`, '-i', '-',
+          '-filter_complex', `[0:v][1:v]overlay[o];[o]${scale}:flags=bicubic[out]`,
           '-map', '[out]',
           '-c:v', 'libx264',
           '-profile:v', ffmpegOptions.profileVideo,
@@ -326,9 +320,7 @@ ${inject.body || ''}
           '-crf', ffmpegOptions.crf,
           '-movflags', 'faststart',
           '-pix_fmt', 'yuv420p',
-          //// Passing a -r flag breaks tpad for some reason:
-          //// https://trac.ffmpeg.org/ticket/8409
-          // '-r', fps
+          '-r', fps
         )
       }
 
