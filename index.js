@@ -73,8 +73,7 @@ module.exports = async (opts) => {
     ffmpegOptions = {
       crf: 20,
       profileVideo: 'main',
-      preset: 'medium',
-      finalFrameFreezeSeconds: 0
+      preset: 'medium'
     },
     gifskiOptions = {
       quality: 80,
@@ -98,7 +97,6 @@ module.exports = async (opts) => {
       return val >= 0 && val <= 51
     }),
     profileVideo: ow.string.oneOf(['baseline', 'main', 'high', 'high10', 'high422', 'high444']),
-    finalFrameFreezeSeconds: ow.number.integer,
     preset: ow.string.oneOf([
       'ultrafast',
       'superfast',
@@ -322,11 +320,10 @@ ${inject.body || ''}
           '-crf', ffmpegOptions.crf,
           '-movflags', 'faststart',
           '-pix_fmt', 'yuv420p',
+          '-vf', 'tpad=stop_mode=clone:stop_duration=40',
           '-r', fps
         )
       }
-
-      if (ffmpegOptions.finalFrameFreezeSeconds > 0) ffmpegArgs.push('-vf', `tpad=stop_mode=clone:stop_duration=${ffmpegOptions.finalFrameFreezeSeconds}`)
 
       ffmpegArgs.push(
         '-frames:v', `${numOutputFrames}`,
