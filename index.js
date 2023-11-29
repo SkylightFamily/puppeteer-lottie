@@ -322,7 +322,9 @@ ${inject.body || ''}
           '-crf', ffmpegOptions.crf,
           '-movflags', 'faststart',
           '-pix_fmt', 'yuv420p',
-          '-r', fps
+          //// Passing a -r flag breaks tpad for some reason:
+          //// https://trac.ffmpeg.org/ticket/8409
+          // '-r', fps
         )
       }
 
