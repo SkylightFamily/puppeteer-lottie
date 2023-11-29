@@ -313,7 +313,11 @@ ${inject.body || ''}
 
         ffmpegArgs.push(
           '-f', 'lavfi', '-i', `color=c=black:size=${width}x${height}`,
-          '-f', 'image2pipe', '-c:v', 'png', '-r', `${fps}`, '-i', '-',
+          '-f', 'image2pipe', '-c:v', 'png',
+          //// Passing a -r flag breaks tpad for some reason:
+          //// https://trac.ffmpeg.org/ticket/8409
+          // '-r', `${fps}`,
+          '-i', '-',
           '-filter_complex', `[0:v][1:v]overlay[o];[o]tpad=stop_mode=clone:stop_duration=${FINAL_FRAME_SECONDS}[p];[p]${scale}:flags=bicubic[out]`,
           '-map', '[out]',
           '-c:v', 'libx264',
